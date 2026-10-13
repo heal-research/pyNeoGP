@@ -17,6 +17,9 @@ jobs:
     name: Python ${{ matrix.python-version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash -el {0}  # a login shell activates the micromamba environment
     strategy:
       fail-fast: false
       matrix:
@@ -24,12 +27,19 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      # Julia 1.13 (required by NeoGP.jl) needs a Python linked with OpenSSL 3.5 or newer
+      # (juliapkg refuses Julia >= 1.12 otherwise).  The Pythons of actions/setup-python
+      # use an older OpenSSL; the ones of conda-forge a current one.
+      - uses: mamba-org/setup-micromamba@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          environment-name: test
+          create-args: >-
+            -c conda-forge
+            python=${{ matrix.python-version }}
       - uses: julia-actions/setup-julia@v3
         with:
           version: '1'
       - uses: julia-actions/cache@v3
+      - run: python -c "import ssl, sys; print(sys.version); print(ssl.OPENSSL_VERSION)"
       - run: python -m pip install -e ".[test]"
       - run: python -m pytest
