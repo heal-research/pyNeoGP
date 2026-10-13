@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyneogp"
+version = "0.1.0"
+description = "Python bindings to NeoGP.jl: tree-based genetic programming for symbolic regression"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Gabriel Kronberger", email = "gabriel.kronberger@heuristiclab.com" }]
+requires-python = ">=3.10"
+dependencies = ["juliacall>=0.9.28", "numpy"]
+keywords = ["symbolic regression", "genetic programming", "julia"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+examples = ["matplotlib"]
+
+[project.urls]
+Homepage = "https://github.com/heal-research/pyNeoGP"
+NeoGP = "https://github.com/heal-research/NeoGP.jl"
+
+[tool.setuptools]
+packages = ["pyneogp", "pyneogp.tests"]
+
+[tool.setuptools.package-data]
+pyneogp = ["juliapkg.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["pyneogp/tests"]

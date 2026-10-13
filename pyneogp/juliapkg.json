@@ -1,0 +1,10 @@
+{
+    "julia": "1.13",
+    "packages": {
+        "NeoGP": {
+            "uuid": "fe65fcaf-0a20-4e9a-99a2-9f417ca4b589",
+            "url": "https://github.com/heal-research/NeoGP.jl",
+            "version": "0.1"
+        }
+    }
+}
