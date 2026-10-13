@@ -20,8 +20,8 @@ if not (checkout / "src" / "NeoGP.jl").is_file():
     sys.exit(f"{checkout} is not a checkout of NeoGP.jl")
 
 path = pathlib.Path(__file__).parent / "pyneogp" / "juliapkg.json"
-spec = json.loads(path.read_text())
+spec = json.loads(path.read_text(encoding="utf-8"))
 neogp = spec["packages"]["NeoGP"]
 spec["packages"]["NeoGP"] = {"uuid": neogp["uuid"], "path": str(checkout), "dev": True}
-path.write_text(json.dumps(spec, indent=4) + "\n")
+path.write_text(json.dumps(spec, indent=4) + "\n", encoding="utf-8", newline="\n")
 print(f"{path}: NeoGP is developed from {checkout}")

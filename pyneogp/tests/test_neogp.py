@@ -143,6 +143,6 @@ def test_cli(tmp_path):
     run_redirected(lambda: neogp.main([data_file("nikuradse_1_train.csv"), "target",
                                        "--generations", "2", "--popsize", "50", "--seed", "1"]),
                    str(output))
-    lines = output.read_text().splitlines()
+    lines = output.read_text(encoding="utf-8").splitlines()
     header = next(i for i, line in enumerate(lines) if line.startswith("gen,fevals"))
     assert [line.split(",")[0] for line in lines[header + 1:]] == ["1", "2"]

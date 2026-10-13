@@ -65,7 +65,7 @@ def last_model_raw_expression(output):
     `output`) as printed by NeoGP.  The expression is the last, quoted field of the line; it
     is followed by the name of the likelihood and the likelihood parameters, which are
     removed."""
-    line = pathlib.Path(output).read_text().splitlines()[-1]
+    line = pathlib.Path(output).read_text(encoding="utf-8").splitlines()[-1]
     expr = re.sub(r'.*,"([^"]*)"$', r"\1", line)
     return re.sub(r" [^ ]+ (Float[0-9]+)?\[.*\]$", "", expr)
 
