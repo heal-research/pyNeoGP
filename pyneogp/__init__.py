@@ -23,6 +23,9 @@ __version__ = "0.1.0"
 if "PYTHON_JULIACALL_THREADS" not in os.environ and "JULIA_NUM_THREADS" not in os.environ:
     os.environ["PYTHON_JULIACALL_THREADS"] = "auto"
 os.environ.setdefault("PYTHON_JULIACALL_HANDLE_SIGNALS", "yes")
+# juliacall loads ~/.julia/config/startup.jl, which fails if it loads packages that are
+# not installed for the Julia version of juliacall (e.g. Revise), so skip it by default.
+os.environ.setdefault("PYTHON_JULIACALL_STARTUP_FILE", "no")
 
 
 def load_julia_packages(*names):
