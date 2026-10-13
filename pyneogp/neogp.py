@@ -1,7 +1,7 @@
 """
 The Julia module NeoGP, imported with ``from pyneogp import neogp``.
 
-As in diffeqpy, this module replaces itself with the Julia module, so the Julia
+This module replaces itself with the Julia module, so the Julia
 API is used from Python as it is used from Julia: ``neogp.NSGA2(...)``,
 ``neogp.evolve_b(gp, 100)`` (``!`` becomes ``_b``), ``neogp.ADD``, ...
 
