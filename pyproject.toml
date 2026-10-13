@@ -34,3 +34,6 @@ pyneogp = ["juliapkg.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["pyneogp/tests"]
+# pytest's faulthandler replaces Julia's signal handlers, which Julia needs with several
+# threads; on Linux, Python then crashes at exit after the tests (JuliaPy/PythonCall.jl#818).
+addopts = "-p no:faulthandler"
