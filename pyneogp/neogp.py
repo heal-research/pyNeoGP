@@ -85,7 +85,19 @@ class JuliaFunction:
 
     @property
     def __doc__(self):
-        return str(_jl.Docs.doc(self.julia))
+        return str(_doc()(self.julia))
+
+
+def _doc():
+    """`Docs.doc`, whose methods for Julia objects are defined in the REPL standard library
+    (since Julia 1.11), which is not loaded by juliacall."""
+    global _doc_function
+    if _doc_function is None:
+        _doc_function = _jl.seval("begin import REPL; x -> Docs.doc(x) end")
+    return _doc_function
+
+
+_doc_function = None
 
 
 class _NeoGPModule(types.ModuleType):
