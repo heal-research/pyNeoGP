@@ -19,7 +19,8 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+sklearn = ["scikit-learn>=1.6", "sympy"]
+test = ["pytest", "scikit-learn>=1.6", "sympy"]
 examples = ["matplotlib"]
 
 [project.urls]

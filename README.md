@@ -13,6 +13,44 @@ datasets, command line options), the
 below, references of the datasets), and the docstrings of the Julia API.  This README only
 describes the use from Python.
 
+## Example: scikit-learn interface
+
+`pyneogp.sklearn.NeoGPRegressor` runs NeoGP's NSGA2 as a scikit-learn regressor (install with
+`pip install "pyneogp[sklearn] @ git+https://github.com/heal-research/pyNeoGP"`, see
+[Installation](#installation)):
+
+```python
+import numpy as np
+import sympy
+from pyneogp.sklearn import NeoGPRegressor
+
+rng = np.random.default_rng(0)
+X = rng.uniform(1, 5, size=(200, 2))
+y = X[:, 0] * np.exp(-0.5 * X[:, 1]) + 0.01 * rng.normal(size=200)
+
+model = NeoGPRegressor(generations=50, popsize=500, maxlen=30, seed=1)
+model.fit(X, y)                      # model.fit(X, y, yerr=sigma_y) for known errors of y
+model.score(X, y)                    # R² of the best expression: 0.9997...
+model.predict(X[:5])
+
+model.get_best_expression()          # '(x0 / sqrt((exp(x1) + 0.00544779899501241)))'
+expr = model.get_best_sympy()        # x0/sqrt(exp(x1) + 0.00544779899501241)
+f = sympy.lambdify(sympy.symbols("x0 x1"), expr, "numpy")
+
+for entry in model.get_pareto_front():  # all expressions of the Pareto front
+    print(entry["objectives"], entry["criterion"], entry["sympy"])
+```
+
+The model is the expression of the Pareto front with the lowest model-selection criterion
+(`model_selection="dl"`: the description length with the rotated parameter complexity,
+`param_complexity="rot"`).  The constructor takes the settings of NSGA2 (`popsize`, `maxlen`,
+`functionset="ADD,SUB,MUL,DIV,EXP,LOG"`, `objective`, `seed`, ...) and the `likelihood`:
+`"gaussian"` (default) or `"laplace"`, with optional errors `yerr` of the target, or the ROXY
+likelihoods `"roxy_unif"` and `"roxy_mnr_diagonal"`, which require the errors of the inputs and
+the target, `model.fit(X, y, Xerr=sigma_X, yerr=sigma_y)`.  Inputs are named `x0, x1, ...`, or
+by the columns of a pandas DataFrame.  After `fit`, `model.nsga2_` is the state of NSGA2 for the
+Julia API below.
+
 ## Installation
 
 ```bash
